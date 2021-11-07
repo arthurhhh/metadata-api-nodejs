@@ -3,6 +3,7 @@ const path = require('path')
 const moment = require('moment')
 const { HOST } = require('./src/constants')
 const db = require('./src/database')
+const token_access = require('./access_token')
 
 const PORT = process.env.PORT || 5000
 
@@ -19,18 +20,21 @@ app.get('/', function(req, res) {
 })
 
 app.get('/api/token/:token_id', function(req, res) {
-  const tokenId = parseInt(req.params.token_id).toString()
+  let idInt = parseInt(req.params.token_id) % 6
+  const tokenId = idInt.toString()
   const person = db[tokenId]
   const bdayParts = person.birthday.split(' ')
   const day = parseInt(bdayParts[1])
   const month = parseInt(bdayParts[0])
+  const {name, value} = await token_access.get_token(tokenId)
   const data = {
     'name': person.name,
+    'description': name + ": " + value,
     'attributes': {
       'birthday': person.birthday,
       'birth month': monthName(month),
       'zodiac sign': zodiac(day, month),
-      // 'age': moment().diff(person.birthday, 'years')
+      'age': moment().diff(person.birthday, 'years')
     },
     'image': `${HOST}/images/${tokenId}.png`
   }
