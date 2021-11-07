@@ -19,14 +19,14 @@ app.get('/', function(req, res) {
   res.send('Get ready for OpenSea!');
 })
 
-app.get('/api/token/:token_id', function(req, res) {
+app.get('/api/token/:token_id', async function(req, res) {
   let idInt = parseInt(req.params.token_id) % 6
-  const tokenId = idInt.toString()
-  const person = db[tokenId]
+  const fakeTokenId = idInt.toString()
+  const person = db[fakeTokenId]
   const bdayParts = person.birthday.split(' ')
   const day = parseInt(bdayParts[1])
   const month = parseInt(bdayParts[0])
-  const {name, value} = await token_access.get_token(tokenId)
+  const {name, value} = await token_access(req.params.token_id)
   const data = {
     'name': person.name,
     'description': name + ": " + value,
@@ -36,7 +36,7 @@ app.get('/api/token/:token_id', function(req, res) {
       'zodiac sign': zodiac(day, month),
       'age': moment().diff(person.birthday, 'years')
     },
-    'image': `${HOST}/images/${tokenId}.png`
+    'image': `${HOST}/images/${fakeTokenId}.png`
   }
   res.send(data)
 })
