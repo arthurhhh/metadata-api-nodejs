@@ -39,7 +39,7 @@ async function get_content(tokenId) {
 
     // Access a simple mark
     const {name, value}  = await nftContract.methods
-      .get(tokenId)
+      .get_mark(tokenId)
       .call();
     console.log("Name: " + name + ", value: " + value);
     return {name, value}

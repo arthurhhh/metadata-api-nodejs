@@ -1,4 +1,4 @@
-const HOST = 'https://leave-a-mark-on-meta.herokuapp.com'
+const HOST = 'https://leave-a-mark-in-meta.herokuapp.com'
 
 module.exports = {
   HOST
