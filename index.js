@@ -28,8 +28,8 @@ app.get('/api/token/:token_id', async function(req, res) {
   const month = parseInt(bdayParts[0])
   const {name, value} = await token_access(req.params.token_id)
   const data = {
-    'name': person.name,
-    'description': name + ": " + value,
+    'name': name,
+    'description': '"' + value + '"',
     'attributes': {
       'birthday': person.birthday,
       'birth month': monthName(month),
