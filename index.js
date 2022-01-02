@@ -24,26 +24,27 @@ app.get('/', function(req, res) {
 app.get('/api/token/:token_id', async function(req, res) {
   var token_id = req.params.token_id;
   const {name, value} = await get_content(token_id);
-  if(!fs.existsSync('./public/images/' + token_id + '.png')) {
-    var url;
-    const python = spawn('python3', ['picture_generator.py', name, value, token_id]);
-    // collect data from script
-    python.stdout.on('data', function(output) {
-      console.log('Pipe data from python script ...');
-      url = output.toString();
-    });
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-      const data = {
-        'name': name,
-        'description': '"' + value + '"',
-        'attributes': {
-        },
-        'image': url
-      };
-      res.send(data);
-    });
-  }
+  
+  var url;
+  const python = spawn('python3', ['picture_generator.py', name, value, token_id]);
+  // collect data from script
+  python.stdout.on('data', function(output) {
+    console.log('Pipe data from python script ...');
+    url = output.toString();
+  });
+  // in close event we are sure that stream from child process is closed
+  python.on('close', (code) => {
+    const data = {
+      'name': name,
+      'description': '"' + value + '"',
+      'attributes': {
+      },
+      'image': url
+    };
+    console.log("URL: " + url);
+    res.send(data);
+  });
+
 });
 
 app.listen(app.get('port'), function() {
