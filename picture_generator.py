@@ -3,6 +3,8 @@ from PIL import Image, ImageDraw, ImageFont
 from datetime import date
 import random
 import math
+import cloudinary
+import cloudinary.uploader
 
 assert(len(sys.argv) == 4)
 author = sys.argv[1]
@@ -100,13 +102,9 @@ def break_line_into_multiple(line, upper_size, lower_size, number_size):
             
 def break_text(text, upper_size, lower_size, number_size, max_num_lines):
     lines = text.split("\\n")
-    print("lines")
-    print(lines)
     broken_text = []
     for line in lines:
-        print(line)
         broken = broken_text.extend(break_line_into_multiple(line, upper_size, lower_size, number_size))
-        print(broken)
     if len(broken_text) > max_num_lines:
         broken_text = broken_text[0:max_num_lines]
         last_line = broken_text[-1]
@@ -125,13 +123,16 @@ def print_with_gap(draw, xpos, ypos, font, text, gap, fill):
 words_font = ImageFont.truetype("./assets/fonts/Quantico-Bold.ttf", WORDS_FONT_SIZE)
 name_font = ImageFont.truetype("./assets/fonts/Quantico-Regular.ttf", NAME_FONT_SIZE)
 date_font = ImageFont.truetype("./assets/fonts/Quantico-Regular.ttf", DATE_FONT_SIZE)
+cloudinary.config( 
+  cloud_name = "drdnhdpds", 
+  api_key = "179442926732313", 
+  api_secret = "f9K6yvqNNVm_r3syY2MoiGUzfm0" 
+)
 with Image.open("./assets/background/background_card.png") as base:
     image_editable = ImageDraw.Draw(base)
     # Add words
     last_word_broken = break_text(last_word, UPPER_CASE_SIZE_FOR_WORDS, LOWER_CASE_SIZE_FOR_WORDS, NUMBER_SIZE_FOR_WORDS, MAX_NUM_LINES_FOR_WORDS)
     image_editable.text(WORDS_COORDINATE, last_word_broken, font=words_font, fill=(0, 0, 0), spacing=WORDS_SPACING)
-    print("last_word_broken")
-    print(last_word_broken)
     
     # Add author
     author_broken = break_text(author_quote, UPPER_CASE_SIZE_FOR_NAME, LOWER_CASE_SIZE_FOR_NAME, NUMBER_SIZE_FOR_NAME, MAX_NUM_LINES_FOR_NAME)
@@ -140,9 +141,13 @@ with Image.open("./assets/background/background_card.png") as base:
     # Add date
     print_with_gap(image_editable, DATE_COORDINATE[0], DATE_COORDINATE[1], date_font, date_str, DATE_GAP_WIDTH, (0,0,0))
     
-    print("author_broken")
-    print(author_broken)
+    image_path = "./public/images/" + id + ".png"
     base.save("./public/images/" + id + ".png")
+    
+    # Upload to cloundinray
+    result = cloudinary.uploader.upload(image_path, public_id="tokens/" + id)
+    print(result['url'], end='')
+    
 
  
 
