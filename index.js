@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
 app.get('/api/token/:token_id', async function(req, res) {
   var token_id = req.params.token_id;
   const {name, value} = await get_content(token_id);
-  
+
   var url;
   const python = spawn('python3', ['picture_generator.py', name, value, token_id]);
   // collect data from script
@@ -32,13 +32,15 @@ app.get('/api/token/:token_id', async function(req, res) {
     console.log('Pipe data from python script ...');
     url = output.toString();
   });
+  python.on( 'error', ( err ) => {
+    throw `failed to initialize command : "${ err }"`;
+  } );
   // in close event we are sure that stream from child process is closed
   python.on('close', (code) => {
     const data = {
       'name': name,
       'description': '"' + value + '"',
-      'attributes': {
-      },
+      'attributes': {},
       'image': url
     };
     console.log("URL: " + url);
