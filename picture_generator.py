@@ -5,6 +5,7 @@ import random
 import math
 import cloudinary
 import cloudinary.uploader
+import io
 
 assert(len(sys.argv) == 4)
 author = sys.argv[1]
@@ -141,11 +142,13 @@ with Image.open("./assets/background/background_card.png") as base:
     # Add date
     print_with_gap(image_editable, DATE_COORDINATE[0], DATE_COORDINATE[1], date_font, date_str, DATE_GAP_WIDTH, (0,0,0))
     
-    image_path = "./public/images/" + id + ".png"
-    base.save("./public/images/" + id + ".png")
+    # image_path = "./public/images/" + id + ".png"
+    # base.save("./public/images/" + id + ".png")
+    img_byte_arr = io.BytesIO()
+    base.save(img_byte_arr, format="PNG")
     
     # Upload to cloundinray
-    result = cloudinary.uploader.upload(image_path, public_id="tokens/" + id)
+    result = cloudinary.uploader.upload(img_byte_arr.getbuffer(), public_id="tokens/" + id)
     print(result['url'], end='')
     
 
