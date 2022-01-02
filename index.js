@@ -45,7 +45,7 @@ app.get('/api/token/:token_id', async function(req, res) {
     };
     console.log("URL: " + url);
     res.send(data);
-  });
+  }); 
 
 });
 
