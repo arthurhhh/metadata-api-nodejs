@@ -23,7 +23,10 @@ app.get('/', function(req, res) {
 
 app.get('/api/token/:token_id', async function(req, res) {
   var token_id = req.params.token_id;
-  const {name, value} = await get_content(token_id);
+  var mark = await get_content(token_id);
+  const strArray = mark.split(":", 2);
+  const name = strArray[0];
+  const value = strArray[1];
 
   var url;
   const python = spawn('python3', ['picture_generator.py', name, value, token_id]);

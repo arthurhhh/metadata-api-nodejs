@@ -38,10 +38,10 @@ async function get_content(tokenId) {
     );
 
     // Access a simple mark
-    const {name, value}  = await nftContract.methods
+    var mark  = await nftContract.methods
       .get_mark(tokenId)
       .call();
-    return {name, value}
+    return mark
   } else {
     console.error(
       "Add NFT_CONTRACT_ADDRESS to the environment variables"
