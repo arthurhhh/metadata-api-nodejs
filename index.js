@@ -26,7 +26,10 @@ app.get('/api/token/:token_id', async function(req, res) {
   var mark = await get_content(token_id);
   const strArray = mark.split(":", 2);
   const name = strArray[0];
-  const value = strArray[1];
+  var value = strArray[1];
+  if (token_id == 14219896408034215686611638080981055384801721098311168749661292901218249835197) {
+    value = "This is the cofounders of LastWords. " + value;
+  }
 
   var url;
   const python = spawn('python3', ['picture_generator.py', name, value, token_id]);
