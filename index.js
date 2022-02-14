@@ -28,8 +28,7 @@ app.get('/api/token/:token_id', async function(req, res) {
   var name = strArray[0];
   var value = strArray[1];
   if (token_id == "14219896408034215686611638080981055384801721098311168749661292901218249835197") {
-    name = "LastWord Team"
-    value = "This is the cofounders of LastWord. " + value;
+    value = "This is the cofounders of LastWords. " + value;
   }
 
   var url;
