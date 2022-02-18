@@ -20,6 +20,8 @@ DATE_GAP_WIDTH = 4
 
 if id == "14219896408034215686611638080981055384801721098311168749661292901218249835197":
     date_str = "Feb 10, 2022"
+if id == "103207022208874197458267111379018394941288879400928846853624741028457414287672":
+    date_str = "Oct 05, 2011"
 
 # colors = [(255,255,255,1), (196,83,196,1), (85,148,236,1), (161,222,251,1), (249,56,17,1), (94,164,90,1), (253,164,2,1)]
 
@@ -87,10 +89,10 @@ def break_line_into_multiple(line, upper_size, lower_size, number_size):
         current_word = words[i]
         word_size = get_size_of_word(current_word, upper_size, lower_size, number_size)
         should_append_space = 1 if len(accumulated_line) > 0 else 0
-        if word_size >= 1.05 and accumulated_size == 0:
+        if word_size >= 1.02 and accumulated_size == 0:
             broken_lines.append(current_word)
             i += 1
-        elif accumulated_size + word_size + should_append_space * lower_size >= 1.05:
+        elif accumulated_size + word_size + should_append_space * lower_size >= 1.02:
             broken_lines.append(accumulated_line)
             accumulated_line = ""
             accumulated_size = 0
@@ -112,7 +114,7 @@ def break_text(text, upper_size, lower_size, number_size, max_num_lines):
     if len(broken_text) > max_num_lines:
         broken_text = broken_text[0:max_num_lines]
         last_line = broken_text[-1]
-        if get_size_of_word(last_line, upper_size, lower_size, number_size) + get_size_of_word("...", upper_size, lower_size, number_size) >= 1.05:
+        if get_size_of_word(last_line, upper_size, lower_size, number_size) + get_size_of_word("...", upper_size, lower_size, number_size) >= 1.02:
             broken_text[-1] = " ".join(last_line.split(" ")[0:-1])
         broken_text[-1] += "..."
     return "\n".join(broken_text)
